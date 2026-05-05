@@ -1,0 +1,22 @@
+# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node (in case you ever add tooling)
+node_modules/
+
+# Claude Code per-folder settings
+.claude/
+
+# Logs
+*.log
+npm-debug.log*
