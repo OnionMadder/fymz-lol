@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Bala Draws | FYMZ</title>
+    <link rel="canonical" href="https://fymz.lol/bala-draws/" />
+    <meta name="description" content="A simple, touch-friendly coloring and doodle pad for kids. No ads, ever." />
+    <meta name="theme-color" content="#00ffcc" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favi/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favi/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favi/favicon-16x16.png" />
+    <link rel="shortcut icon" href="../assets/favi/favicon.ico" />
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent-cyan: #00ffcc;
+            --accent-pink: #ff00ff;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --border-thin: 1px solid rgba(255, 255, 255, 0.15);
+            --paper: #ffffff;
+            --ink: #1a1a1a;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            background-color: var(--bg-color);
+            background-image:
+                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        header.top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+            border-bottom: var(--border-thin);
+            flex-shrink: 0;
+        }
+
+        header.top h1 {
+            font-size: clamp(1.1rem, 4vw, 1.6rem);
+            margin: 0;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff 60%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(2px 2px 0 var(--accent-pink));
+            letter-spacing: 1px;
+        }
+
+        .back {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.7rem;
+            border: 1px solid var(--accent-cyan);
+            border-radius: 6px;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .back:active { background: var(--accent-cyan); color: #000; box-shadow: 0 0 12px var(--accent-cyan); }
+
+        .spacer { width: 70px; }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: var(--border-thin);
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .palette {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .swatch {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: var(--c);
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.1s, box-shadow 0.15s;
+            touch-action: manipulation;
+        }
+        .swatch.active {
+            border-color: var(--accent-cyan);
+            transform: scale(1.18);
+            box-shadow: 0 0 12px var(--accent-cyan);
+        }
+
+        .group {
+            display: flex;
+            gap: 0.3rem;
+            align-items: center;
+        }
+
+        .size-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            touch-action: manipulation;
+            transition: all 0.1s;
+        }
+        .size-btn .dot { background: #fff; border-radius: 50%; display: block; }
+        .size-btn[data-size="4"] .dot { width: 6px; height: 6px; }
+        .size-btn[data-size="14"] .dot { width: 14px; height: 14px; }
+        .size-btn[data-size="30"] .dot { width: 26px; height: 26px; }
+        .size-btn.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 255, 204, 0.12);
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
+        .size-btn:active { transform: scale(0.94); }
+
+        .tool-btn {
+            padding: 0.55rem 0.9rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+            white-space: nowrap;
+            transition: all 0.1s;
+        }
+        .tool-btn:active { transform: scale(0.96); }
+        .tool-btn.active {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+        .tool-btn.primary {
+            border-color: var(--accent-pink);
+            color: var(--accent-pink);
+        }
+        .tool-btn.primary:active {
+            background: var(--accent-pink);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-pink);
+        }
+
+        .stage {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem;
+            min-height: 0;
+        }
+
+        .paper {
+            position: relative;
+            background: var(--paper);
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 255, 204, 0.18), 0 0 0 1px rgba(0, 255, 204, 0.25);
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+
+        #template-svg, #canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #canvas {
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        #template-svg { pointer-events: none; }
+
+        @media (max-width: 600px) {
+            .swatch { width: 32px; height: 32px; }
+            .size-btn { width: 38px; height: 38px; }
+            .tool-btn { font-size: 0.78rem; padding: 0.5rem 0.65rem; }
+            .toolbar { padding: 0.5rem 0.4rem; gap: 0.4rem; }
+            .stage { padding: 0.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="top">
+    <a href="../" class="back">&larr; FYMZ</a>
+    <h1>Bala Draws</h1>
+    <div class="spacer"></div>
+</header>
+
+<div class="toolbar">
+    <div class="palette" id="palette"></div>
+    <div class="group">
+        <button class="size-btn" data-size="4" aria-label="Small brush"><span class="dot"></span></button>
+        <button class="size-btn active" data-size="14" aria-label="Medium brush"><span class="dot"></span></button>
+        <button class="size-btn" data-size="30" aria-label="Big brush"><span class="dot"></span></button>
+    </div>
+    <button class="tool-btn" id="eraser">Eraser</button>
+    <button class="tool-btn" id="clear">Clear</button>
+    <button class="tool-btn primary" id="save">Save</button>
+    <button class="tool-btn" id="page">Page: Blank</button>
+</div>
+
+<div class="stage">
+    <div class="paper" id="paper">
+        <svg id="template-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg>
+        <canvas id="canvas"></canvas>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    const COLORS = [
+        '#e74c3c', '#f39c12', '#f1c40f', '#2ecc71',
+        '#00ffcc', '#3498db', '#9b59b6', '#ff00ff',
+        '#8b4513', '#1a1a1a'
+    ];
+
+    const TEMPLATES = {
+        blank: { name: 'Blank', svg: '' },
+        cat: {
+            name: 'Cat',
+            svg: `
+                <g fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="400" cy="270" r="150"/>
+                    <path d="M 285 185 L 265 80 L 365 165 Z"/>
+                    <path d="M 515 185 L 535 80 L 435 165 Z"/>
+                    <path d="M 295 175 L 290 110 L 340 160"/>
+                    <path d="M 505 175 L 510 110 L 460 160"/>
+                    <circle cx="345" cy="255" r="22"/>
+                    <circle cx="455" cy="255" r="22"/>
+                    <circle cx="345" cy="255" r="9" fill="#1a1a1a"/>
+                    <circle cx="455" cy="255" r="9" fill="#1a1a1a"/>
+                    <path d="M 385 305 L 415 305 L 400 325 Z"/>
+                    <path d="M 400 325 L 400 340"/>
+                    <path d="M 400 340 Q 380 358 365 345"/>
+                    <path d="M 400 340 Q 420 358 435 345"/>
+                    <path d="M 320 315 L 240 305"/>
+                    <path d="M 320 330 L 240 335"/>
+                    <path d="M 320 345 L 240 365"/>
+                    <path d="M 480 315 L 560 305"/>
+                    <path d="M 480 330 L 560 335"/>
+                    <path d="M 480 345 L 560 365"/>
+                    <path d="M 290 390 Q 280 490 320 545 L 480 545 Q 520 490 510 390"/>
+                    <path d="M 320 545 L 320 568 Q 340 578 360 568 L 360 545"/>
+                    <path d="M 440 545 L 440 568 Q 460 578 480 568 L 480 545"/>
+                    <path d="M 510 445 Q 605 425 625 365 Q 630 320 590 320"/>
+                </g>
+            `
+        },
+        fish: {
+            name: 'Fish',
+            svg: `
+                <g fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M 200 300 Q 250 175 450 175 Q 605 175 625 300 Q 605 425 450 425 Q 250 425 200 300 Z"/>
+                    <path d="M 200 300 L 95 215 L 130 300 L 95 385 Z"/>
+                    <path d="M 380 188 Q 425 120 475 195"/>
+                    <path d="M 380 412 Q 425 480 475 405"/>
+                    <path d="M 270 225 Q 290 300 270 375"/>
+                    <circle cx="540" cy="260" r="24"/>
+                    <circle cx="540" cy="260" r="10" fill="#1a1a1a"/>
+                    <path d="M 605 320 Q 590 335 610 348"/>
+                    <path d="M 320 250 Q 345 275 320 300"/>
+                    <path d="M 380 250 Q 405 275 380 300"/>
+                    <path d="M 440 250 Q 465 275 440 300"/>
+                    <path d="M 350 315 Q 375 340 350 365"/>
+                    <path d="M 410 315 Q 435 340 410 365"/>
+                    <path d="M 470 315 Q 495 340 470 365"/>
+                    <circle cx="660" cy="180" r="14"/>
+                    <circle cx="700" cy="135" r="10"/>
+                    <circle cx="685" cy="95" r="6"/>
+                </g>
+            `
+        }
+    };
+
+    const TEMPLATE_ORDER = ['blank', 'cat', 'fish'];
+    let templateIdx = 0;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const tplSvg = document.getElementById('template-svg');
+    const paper = document.getElementById('paper');
+    const eraserBtn = document.getElementById('eraser');
+
+    let color = COLORS[0];
+    let size = 14;
+    let erasing = false;
+    let drawing = false;
+    let last = null;
+
+    const paletteEl = document.getElementById('palette');
+    COLORS.forEach((c, i) => {
+        const b = document.createElement('button');
+        b.className = 'swatch' + (i === 0 ? ' active' : '');
+        b.style.setProperty('--c', c);
+        b.dataset.color = c;
+        b.setAttribute('aria-label', 'Color ' + c);
+        b.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            b.classList.add('active');
+            color = c;
+            erasing = false;
+            eraserBtn.classList.remove('active');
+        });
+        paletteEl.appendChild(b);
+    });
+
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            size = parseInt(btn.dataset.size, 10);
+        });
+    });
+
+    eraserBtn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        erasing = !erasing;
+        eraserBtn.classList.toggle('active', erasing);
+    });
+
+    document.getElementById('clear').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+    });
+
+    document.getElementById('save').addEventListener('pointerdown', async (e) => {
+        e.preventDefault();
+        const out = document.createElement('canvas');
+        out.width = canvas.width;
+        out.height = canvas.height;
+        const octx = out.getContext('2d');
+        octx.fillStyle = '#ffffff';
+        octx.fillRect(0, 0, out.width, out.height);
+
+        const tplKey = TEMPLATE_ORDER[templateIdx];
+        if (tplKey !== 'blank') {
+            const svgStr = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="' +
+                out.width + '" height="' + out.height +
+                '" preserveAspectRatio="xMidYMid meet">' + TEMPLATES[tplKey].svg + '</svg>';
+            const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            await new Promise((res) => {
+                const img = new Image();
+                img.onload = () => { octx.drawImage(img, 0, 0); URL.revokeObjectURL(url); res(); };
+                img.onerror = () => { URL.revokeObjectURL(url); res(); };
+                img.src = url;
+            });
+        }
+        octx.drawImage(canvas, 0, 0);
+        const a = document.createElement('a');
+        a.download = 'bala-draws-' + Date.now() + '.png';
+        a.href = out.toDataURL('image/png');
+        a.click();
+    });
+
+    const pageBtn = document.getElementById('page');
+    pageBtn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        templateIdx = (templateIdx + 1) % TEMPLATE_ORDER.length;
+        const t = TEMPLATES[TEMPLATE_ORDER[templateIdx]];
+        tplSvg.innerHTML = t.svg;
+        pageBtn.textContent = 'Page: ' + t.name;
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+    });
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = paper.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+
+        const tmp = document.createElement('canvas');
+        tmp.width = canvas.width;
+        tmp.height = canvas.height;
+        if (canvas.width > 0 && canvas.height > 0) {
+            tmp.getContext('2d').drawImage(canvas, 0, 0);
+        }
+
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (tmp.width > 0 && tmp.height > 0) {
+            ctx.drawImage(tmp, 0, 0, rect.width, rect.height);
+        }
+    }
+
+    if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(resize).observe(paper);
+    } else {
+        window.addEventListener('resize', resize);
+    }
+    requestAnimationFrame(resize);
+
+    function pos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        drawing = true;
+        try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+        last = pos(e);
+        ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(last.x, last.y, size / 2, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+        if (!drawing) return;
+        e.preventDefault();
+        const p = pos(e);
+        ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = size;
+        ctx.beginPath();
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+        last = p;
+    });
+
+    function endStroke() {
+        drawing = false;
+        last = null;
+    }
+    canvas.addEventListener('pointerup', endStroke);
+    canvas.addEventListener('pointercancel', endStroke);
+    canvas.addEventListener('pointerleave', endStroke);
+
+    canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+    canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
+    document.addEventListener('gesturestart', (e) => e.preventDefault());
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target === canvas) e.preventDefault();
+    });
+})();
+</script>
+
+</body>
+</html>
