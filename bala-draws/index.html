@@ -118,21 +118,23 @@
         }
 
         .paper-frame {
-            padding: 12px;
-            border-radius: 16px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 14px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-sizing: content-box;
             transition: background 0.25s, box-shadow 0.25s;
         }
 
         .paper {
             position: relative;
             background: var(--paper);
-            border-radius: 8px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             aspect-ratio: 4 / 3;
             max-width: 100%;
@@ -143,27 +145,17 @@
         .paper.landscape { aspect-ratio: 4 / 3; }
         .paper.portrait { aspect-ratio: 3 / 4; }
 
-        .paper-frame {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #template-svg, #canvas, #sticker-canvas {
+        #template-svg, #canvas {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             display: block;
         }
-
         #canvas { touch-action: none; cursor: crosshair; }
-        #sticker-canvas { touch-action: none; pointer-events: none; cursor: grab; }
         #template-svg { pointer-events: none; }
 
-        body.mode-sticker #canvas { pointer-events: none; }
-        body.mode-sticker #sticker-canvas { pointer-events: auto; }
-
-        #canvas.flipping, #sticker-canvas.flipping {
+        #canvas.flipping {
             animation: flipPage 0.6s forwards;
             pointer-events: none !important;
         }
@@ -177,7 +169,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 8px;
+            border-radius: 6px;
             box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.6);
             animation: pulseRing 0.45s ease-out forwards;
             pointer-events: none;
@@ -201,7 +193,7 @@
 
         .panel-area {
             position: relative;
-            min-height: 76px;
+            min-height: 70px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         .panel {
@@ -316,16 +308,8 @@
             line-height: 1.1;
             transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s, color 0.15s;
         }
-        .tool-btn .ico {
-            font-size: 1.4rem;
-            line-height: 1;
-            display: block;
-        }
-        .tool-btn .lbl {
-            font-size: 0.65rem;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
+        .tool-btn .ico { font-size: 1.4rem; line-height: 1; display: block; }
+        .tool-btn .lbl { font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase; }
         .tool-btn:active { transform: scale(0.94); }
         .tool-btn.active {
             border-color: var(--accent-cyan);
@@ -364,15 +348,15 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 255, 204, 0.4) transparent;
-            min-height: 64px;
+            min-height: 60px;
         }
         .thumbs::-webkit-scrollbar { height: 4px; }
         .thumbs::-webkit-scrollbar-thumb { background: rgba(0, 255, 204, 0.35); border-radius: 2px; }
 
         .page-thumb {
-            width: 64px;
-            height: 56px;
-            min-width: 64px;
+            width: 60px;
+            height: 50px;
+            min-width: 60px;
             background: #fff;
             border: 2px solid rgba(255, 255, 255, 0.25);
             border-radius: 8px;
@@ -393,20 +377,6 @@
             transform: scale(1.05);
         }
         .page-thumb:active { transform: scale(0.95); }
-        .page-thumb .label {
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translate(-50%, 100%);
-            font-size: 0.55rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            pointer-events: none;
-            display: none;
-        }
         .page-thumb.empty {
             background: repeating-linear-gradient(45deg, #f5f5f5, #f5f5f5 6px, #fff 6px, #fff 12px);
             color: #888;
@@ -414,36 +384,10 @@
             font-weight: 700;
         }
 
-        .sticker-thumb {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.8rem;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
-            touch-action: manipulation;
-            flex-shrink: 0;
-        }
-        .sticker-thumb.active {
-            border-color: var(--accent-yellow);
-            box-shadow: 0 0 12px var(--accent-yellow);
-            transform: scale(1.08);
-            background: rgba(241, 196, 15, 0.15);
-        }
-        .sticker-thumb:active { transform: scale(0.94); }
-
         .frame-thumb {
-            width: 64px;
-            height: 56px;
-            min-width: 64px;
+            width: 60px;
+            height: 50px;
+            min-width: 60px;
             border: 2px solid rgba(255, 255, 255, 0.25);
             border-radius: 8px;
             cursor: pointer;
@@ -453,6 +397,7 @@
             position: relative;
             flex-shrink: 0;
             overflow: hidden;
+            background: rgba(255, 255, 255, 0.04);
         }
         .frame-thumb-inner {
             width: 100%;
@@ -524,9 +469,9 @@
         }
 
         /* === 10 Frames + None === */
+        /* All frames keep the same padding so the inner paper size is constant. */
         .paper-frame.frame-none {
             background: transparent;
-            padding: 6px;
         }
         .paper-frame.frame-rainbow {
             background: linear-gradient(135deg, #ff4d4d, #ff9933, #ffd633, #66cc66, #3399ff, #9966cc, #ff66b3);
@@ -547,38 +492,34 @@
         }
         .paper-frame.frame-construction {
             background: #f4d03f;
-            box-shadow:
-                inset 0 0 0 6px transparent,
-                0 8px 24px rgba(0, 0, 0, 0.45);
-            border: 5px dashed #6b4f00;
-            padding: 7px;
+            outline: 5px dashed #6b4f00;
+            outline-offset: -8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
         }
         .paper-frame.frame-gold {
             background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff7c0 50%, #ffd700 75%, #b8860b 100%);
-            box-shadow:
-                inset 0 0 0 3px #8b6914,
-                0 8px 24px rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 0 0 3px #8b6914, 0 8px 24px rgba(0, 0, 0, 0.6);
         }
         .paper-frame.frame-scallops {
             background:
-                radial-gradient(circle at 50% 0%, #ff66b3 10px, transparent 11px) 0 0/22px 11px,
-                radial-gradient(circle at 50% 100%, #ff66b3 10px, transparent 11px) 0 100%/22px 11px,
-                radial-gradient(circle at 0% 50%, #ff66b3 10px, transparent 11px) 0 0/11px 22px,
-                radial-gradient(circle at 100% 50%, #ff66b3 10px, transparent 11px) 100% 0/11px 22px,
+                radial-gradient(circle at 50% 0%, #ff66b3 9px, transparent 10px) 0 0/20px 10px,
+                radial-gradient(circle at 50% 100%, #ff66b3 9px, transparent 10px) 0 100%/20px 10px,
+                radial-gradient(circle at 0% 50%, #ff66b3 9px, transparent 10px) 0 0/10px 20px,
+                radial-gradient(circle at 100% 50%, #ff66b3 9px, transparent 10px) 100% 0/10px 20px,
                 #ffd6e8;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
             background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
         }
         .paper-frame.frame-clouds {
             background:
-                radial-gradient(ellipse 38px 22px at 12% 0%, white 70%, transparent 71%),
-                radial-gradient(ellipse 38px 22px at 50% 0%, white 70%, transparent 71%),
-                radial-gradient(ellipse 38px 22px at 88% 0%, white 70%, transparent 71%),
-                radial-gradient(ellipse 38px 22px at 12% 100%, white 70%, transparent 71%),
-                radial-gradient(ellipse 38px 22px at 50% 100%, white 70%, transparent 71%),
-                radial-gradient(ellipse 38px 22px at 88% 100%, white 70%, transparent 71%),
-                radial-gradient(ellipse 22px 38px at 0% 50%, white 70%, transparent 71%),
-                radial-gradient(ellipse 22px 38px at 100% 50%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 12% 0%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 50% 0%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 88% 0%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 12% 100%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 50% 100%, white 70%, transparent 71%),
+                radial-gradient(ellipse 38px 20px at 88% 100%, white 70%, transparent 71%),
+                radial-gradient(ellipse 20px 38px at 0% 50%, white 70%, transparent 71%),
+                radial-gradient(ellipse 20px 38px at 100% 50%, white 70%, transparent 71%),
                 #87ceeb;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
         }
@@ -601,9 +542,9 @@
         .paper-frame.frame-layers {
             background: #ff6b6b;
             box-shadow:
-                inset 0 0 0 4px #ffe66d,
-                inset 0 0 0 8px #4ecdc4,
-                inset 0 0 0 12px #ffe66d,
+                inset 0 0 0 3px #ffe66d,
+                inset 0 0 0 6px #4ecdc4,
+                inset 0 0 0 9px #ffe66d,
                 0 8px 24px rgba(0, 0, 0, 0.45);
         }
         .paper-frame.frame-spotlight {
@@ -611,12 +552,11 @@
             box-shadow: 0 8px 24px rgba(241, 196, 15, 0.6);
         }
 
-        /* Frame thumb miniatures share the same backgrounds via shared classes */
         .frame-thumb-inner.frame-none { background: transparent; padding: 0; border: 1px dashed rgba(255, 255, 255, 0.4); }
         .frame-thumb-inner.frame-rainbow { background: linear-gradient(135deg, #ff4d4d, #ff9933, #ffd633, #66cc66, #3399ff, #9966cc, #ff66b3); }
         .frame-thumb-inner.frame-dots { background: radial-gradient(circle, white 2px, transparent 3px) 0 0/9px 9px, #ff4fa3; }
         .frame-thumb-inner.frame-stars { background: radial-gradient(circle, #ffd700 1.5px, transparent 2px) 0 0/9px 9px, #0a1a4a; }
-        .frame-thumb-inner.frame-construction { background: #f4d03f; border: 2px dashed #6b4f00; padding: 3px; }
+        .frame-thumb-inner.frame-construction { background: #f4d03f; outline: 2px dashed #6b4f00; outline-offset: -4px; }
         .frame-thumb-inner.frame-gold { background: linear-gradient(135deg, #b8860b, #ffd700, #fff7c0, #ffd700, #b8860b); }
         .frame-thumb-inner.frame-scallops { background: #ff66b3; }
         .frame-thumb-inner.frame-clouds { background: #87ceeb; }
@@ -649,31 +589,29 @@
             .tab-btn .lbl { font-size: 0.55rem; }
             .stage { padding: 0.3rem; }
             .panel { padding: 6px 4px; }
-            .panel-area { min-height: 68px; }
-            .page-thumb, .frame-thumb { width: 56px; height: 50px; min-width: 56px; }
-            .sticker-thumb { width: 48px; height: 48px; min-width: 48px; font-size: 1.6rem; }
+            .panel-area { min-height: 64px; }
+            .page-thumb, .frame-thumb { width: 54px; height: 46px; min-width: 54px; }
             .paper-frame { padding: 8px; }
-            .paper-frame.frame-construction { padding: 5px; }
-            .paper-frame.frame-none { padding: 4px; }
+            .paper-frame.frame-construction { outline-offset: -6px; }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
             header.top h1 { font-size: 0.9rem; }
             .stage { padding: 0.3rem; }
             .panel { padding: 4px 4px; }
-            .panel-area { min-height: 60px; }
+            .panel-area { min-height: 56px; }
             .swatch { width: 36px; height: 36px; min-width: 36px; }
             .size-btn { width: 40px; height: 40px; min-width: 40px; }
             .tool-btn { min-height: 40px; min-width: 40px; padding: 2px 6px; }
             .tool-btn .ico { font-size: 1.1rem; }
             .tab-btn { min-height: 40px; }
-            .page-thumb, .frame-thumb { width: 48px; height: 42px; min-width: 48px; }
-            .sticker-thumb { width: 42px; height: 42px; min-width: 42px; font-size: 1.4rem; }
+            .page-thumb, .frame-thumb { width: 48px; height: 40px; min-width: 48px; }
             .paper-frame { padding: 6px; }
+            .paper-frame.frame-construction { outline-offset: -4px; }
         }
     </style>
 </head>
-<body class="mode-draw">
+<body>
 
 <header class="top">
     <a href="../" class="back">&larr; FYMZ</a>
@@ -686,7 +624,6 @@
         <div class="paper landscape" id="paper">
             <svg id="template-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg>
             <canvas id="canvas"></canvas>
-            <canvas id="sticker-canvas"></canvas>
         </div>
     </div>
 </div>
@@ -708,17 +645,6 @@
         <div class="panel panel-pages" data-panel="pages">
             <div class="thumbs" id="page-thumbs"></div>
         </div>
-        <div class="panel panel-stickers" data-panel="stickers">
-            <div class="row">
-                <div class="sizes" id="sticker-sizes">
-                    <button class="size-btn" data-size="48" aria-label="Small sticker">S</button>
-                    <button class="size-btn active" data-size="80" aria-label="Medium sticker">M</button>
-                    <button class="size-btn" data-size="128" aria-label="Big sticker">L</button>
-                </div>
-                <button class="tool-btn" id="del-sticker" aria-label="Delete sticker"><span class="ico">❌</span><span class="lbl">Remove</span></button>
-            </div>
-            <div class="thumbs" id="sticker-thumbs"></div>
-        </div>
         <div class="panel panel-frames" data-panel="frames">
             <div class="thumbs" id="frame-thumbs"></div>
         </div>
@@ -726,7 +652,6 @@
     <div class="tabs-row">
         <button class="tab-btn active" data-tab="tools" aria-label="Drawing tools"><span class="ico">🎨</span><span class="lbl">Tools</span></button>
         <button class="tab-btn" data-tab="pages" aria-label="Pages"><span class="ico">📄</span><span class="lbl">Pages</span></button>
-        <button class="tab-btn" data-tab="stickers" aria-label="Stickers"><span class="ico">⭐</span><span class="lbl">Stickers</span></button>
         <button class="tab-btn" data-tab="frames" aria-label="Frames"><span class="ico">🖼️</span><span class="lbl">Frames</span></button>
         <button class="tool-btn newpage" id="new-page" aria-label="New page"><span class="ico">✨</span><span class="lbl">New</span></button>
         <button class="tool-btn primary" id="save" aria-label="Save"><span class="ico">💾</span><span class="lbl">Save</span></button>
@@ -958,8 +883,6 @@
 
     const TEMPLATE_KEYS = ['blank', 'cat', 'dog', 'fish', 'dino', 'butterfly', 'car', 'rocket', 'flower', 'sun', 'balloon'];
 
-    const STICKERS = ['🐶','🐱','🦄','🌟','⭐','❤️','🌈','🦋','🌸','🌺','🍓','🍕','🎈','🎁','🚀','☀️','🌙','⚡','🐝','🦖'];
-
     const FRAMES = [
         { key: 'none',         name: 'None' },
         { key: 'rainbow',      name: 'Rainbow' },
@@ -976,38 +899,24 @@
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const stickerCanvas = document.getElementById('sticker-canvas');
-    const sctx = stickerCanvas.getContext('2d');
     const tplSvg = document.getElementById('template-svg');
     const paper = document.getElementById('paper');
     const paperFrame = document.getElementById('paper-frame');
     const eraserBtn = document.getElementById('eraser');
-    const body = document.body;
 
     const state = {
         color: COLORS[0],
         size: 14,
         erasing: false,
-        mode: 'draw',
-        tab: 'tools',
         page: 'blank',
         frame: 'none',
         orientation: 'landscape',
-        stickerSize: 80,
-        activeStickerEmoji: null,
-        placedStickers: [],
-        selectedStickerId: null,
-        nextStickerId: 1,
         flipping: false,
         drawing: false,
-        last: null,
-        stickerDragId: null,
-        stickerDragOffset: { x: 0, y: 0 },
-        stickerLongPressTimer: null,
-        stickerPointerDownAt: null
+        last: null
     };
 
-    /* === Build palette === */
+    /* === Palette === */
     const paletteEl = document.getElementById('palette');
     COLORS.forEach((c, i) => {
         const b = document.createElement('button');
@@ -1022,7 +931,6 @@
             state.color = c;
             state.erasing = false;
             eraserBtn.classList.remove('active');
-            setMode('draw');
         });
         paletteEl.appendChild(b);
     });
@@ -1042,7 +950,6 @@
         e.preventDefault();
         state.erasing = !state.erasing;
         eraserBtn.classList.toggle('active', state.erasing);
-        if (state.erasing) setMode('draw');
     });
 
     /* === Clear === */
@@ -1051,14 +958,11 @@
         clearDrawing();
     });
 
-    /* === New Page button === */
+    /* === New Page (animated) === */
     document.getElementById('new-page').addEventListener('pointerdown', (e) => {
         e.preventDefault();
         if (state.flipping) return;
-        flipPage(() => {
-            clearDrawing();
-            clearStickers();
-        });
+        flipPage(() => clearDrawing());
     });
 
     function flipPage(midCb) {
@@ -1066,14 +970,12 @@
         state.drawing = false;
         state.last = null;
         canvas.classList.add('flipping');
-        stickerCanvas.classList.add('flipping');
         setTimeout(() => {
             if (midCb) midCb();
             paper.classList.add('pulse');
         }, 305);
         setTimeout(() => {
             canvas.classList.remove('flipping');
-            stickerCanvas.classList.remove('flipping');
             paper.classList.remove('pulse');
             state.flipping = false;
         }, 620);
@@ -1086,12 +988,6 @@
         ctx.restore();
     }
 
-    function clearStickers() {
-        state.placedStickers = [];
-        state.selectedStickerId = null;
-        renderStickers();
-    }
-
     /* === Save === */
     document.getElementById('save').addEventListener('pointerdown', async (e) => {
         e.preventDefault();
@@ -1101,17 +997,10 @@
         const octx = out.getContext('2d');
         octx.fillStyle = '#ffffff';
         octx.fillRect(0, 0, out.width, out.height);
-
         if (state.page !== 'blank') {
             await drawTemplateTo(octx, out.width, out.height, state.page);
         }
         octx.drawImage(canvas, 0, 0);
-
-        // Render stickers without selection halo
-        renderStickers(true);
-        octx.drawImage(stickerCanvas, 0, 0);
-        renderStickers();
-
         const a = document.createElement('a');
         a.download = 'bala-draws-' + Date.now() + '.png';
         a.href = out.toDataURL('image/png');
@@ -1131,40 +1020,17 @@
         });
     }
 
-    /* === Tabs === */
+    /* === Tab switching === */
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             const tab = btn.dataset.tab;
-            switchTab(tab);
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
         });
     });
 
-    function switchTab(tab) {
-        state.tab = tab;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-        document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
-        if (tab === 'stickers') {
-            // entering stickers tab implies sticker mode if a sticker is selected
-            if (state.activeStickerEmoji) setMode('sticker');
-        } else {
-            setMode('draw');
-        }
-    }
-
-    function setMode(mode) {
-        state.mode = mode;
-        body.classList.toggle('mode-sticker', mode === 'sticker');
-        body.classList.toggle('mode-draw', mode === 'draw');
-        if (mode === 'draw') {
-            state.activeStickerEmoji = null;
-            document.querySelectorAll('.sticker-thumb').forEach(t => t.classList.remove('active'));
-            state.selectedStickerId = null;
-            renderStickers();
-        }
-    }
-
-    /* === Build page picker === */
+    /* === Page picker === */
     const pageThumbsEl = document.getElementById('page-thumbs');
     TEMPLATE_KEYS.forEach(key => {
         const t = TEMPLATES[key];
@@ -1186,62 +1052,12 @@
                 state.page = key;
                 tplSvg.innerHTML = TEMPLATES[key].svg;
                 clearDrawing();
-                clearStickers();
             });
         });
         pageThumbsEl.appendChild(b);
     });
 
-    /* === Build sticker picker === */
-    const stickerThumbsEl = document.getElementById('sticker-thumbs');
-    STICKERS.forEach(emoji => {
-        const b = document.createElement('button');
-        b.className = 'sticker-thumb';
-        b.textContent = emoji;
-        b.setAttribute('aria-label', 'Sticker: ' + emoji);
-        b.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            document.querySelectorAll('.sticker-thumb').forEach(t => t.classList.remove('active'));
-            b.classList.add('active');
-            state.activeStickerEmoji = emoji;
-            setMode('sticker');
-        });
-        stickerThumbsEl.appendChild(b);
-    });
-
-    /* === Sticker size buttons === */
-    document.querySelectorAll('#sticker-sizes .size-btn').forEach(btn => {
-        btn.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            document.querySelectorAll('#sticker-sizes .size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const newSize = parseInt(btn.dataset.size, 10);
-            state.stickerSize = newSize;
-            // Resize selected sticker if any
-            if (state.selectedStickerId !== null) {
-                const s = state.placedStickers.find(x => x.id === state.selectedStickerId);
-                if (s) {
-                    s.size = newSize;
-                    renderStickers();
-                }
-            }
-        });
-    });
-
-    /* === Delete sticker button === */
-    document.getElementById('del-sticker').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        if (state.selectedStickerId !== null) {
-            state.placedStickers = state.placedStickers.filter(s => s.id !== state.selectedStickerId);
-            state.selectedStickerId = null;
-            renderStickers();
-        } else if (state.placedStickers.length > 0) {
-            state.placedStickers.pop();
-            renderStickers();
-        }
-    });
-
-    /* === Build frame picker === */
+    /* === Frame picker === */
     const frameThumbsEl = document.getElementById('frame-thumbs');
     FRAMES.forEach(f => {
         const b = document.createElement('button');
@@ -1267,13 +1083,11 @@
         const btn = document.getElementById('rotate');
         btn.classList.add('spin');
         setTimeout(() => btn.classList.remove('spin'), 450);
-
         flipPage(() => {
             state.orientation = state.orientation === 'landscape' ? 'portrait' : 'landscape';
             paper.classList.toggle('landscape');
             paper.classList.toggle('portrait');
             clearDrawing();
-            clearStickers();
         });
     });
 
@@ -1283,7 +1097,6 @@
         const rect = paper.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) return;
 
-        // Drawing canvas: stretch-preserve
         const tmp = document.createElement('canvas');
         tmp.width = canvas.width;
         tmp.height = canvas.height;
@@ -1298,12 +1111,6 @@
         if (tmp.width > 0 && tmp.height > 0) {
             ctx.drawImage(tmp, 0, 0, rect.width, rect.height);
         }
-
-        // Sticker canvas: re-render from data
-        stickerCanvas.width = Math.round(rect.width * dpr);
-        stickerCanvas.height = Math.round(rect.height * dpr);
-        sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        renderStickers();
     }
 
     if (typeof ResizeObserver !== 'undefined') {
@@ -1315,13 +1122,12 @@
     requestAnimationFrame(resize);
 
     /* === Drawing handlers === */
-    function pos(e, target) {
-        const rect = (target || canvas).getBoundingClientRect();
+    function pos(e) {
+        const rect = canvas.getBoundingClientRect();
         return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     }
 
     canvas.addEventListener('pointerdown', (e) => {
-        if (state.mode !== 'draw') return;
         e.preventDefault();
         state.drawing = true;
         try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
@@ -1355,104 +1161,9 @@
     canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
     canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
-    /* === Sticker handlers === */
-    function renderStickers(skipSelectionHalo) {
-        const w = stickerCanvas.width / (window.devicePixelRatio || 1);
-        const h = stickerCanvas.height / (window.devicePixelRatio || 1);
-        sctx.save();
-        sctx.setTransform(1, 0, 0, 1, 0, 0);
-        sctx.clearRect(0, 0, stickerCanvas.width, stickerCanvas.height);
-        sctx.restore();
-
-        state.placedStickers.forEach(s => {
-            sctx.font = s.size + 'px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiOne Color", "Twemoji Mozilla", sans-serif';
-            sctx.textAlign = 'center';
-            sctx.textBaseline = 'middle';
-            sctx.fillText(s.emoji, s.x, s.y);
-
-            if (!skipSelectionHalo && s.id === state.selectedStickerId) {
-                sctx.strokeStyle = '#f1c40f';
-                sctx.lineWidth = 3;
-                sctx.setLineDash([6, 4]);
-                const half = s.size / 2;
-                sctx.strokeRect(s.x - half - 4, s.y - half - 4, s.size + 8, s.size + 8);
-                sctx.setLineDash([]);
-            }
-        });
-    }
-
-    function hitTestSticker(x, y) {
-        for (let i = state.placedStickers.length - 1; i >= 0; i--) {
-            const s = state.placedStickers[i];
-            const half = s.size / 2;
-            if (x >= s.x - half && x <= s.x + half && y >= s.y - half && y <= s.y + half) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    stickerCanvas.addEventListener('pointerdown', (e) => {
-        if (state.mode !== 'sticker') return;
-        e.preventDefault();
-        try { stickerCanvas.setPointerCapture(e.pointerId); } catch (_) {}
-        const p = pos(e, stickerCanvas);
-        const hit = hitTestSticker(p.x, p.y);
-
-        if (hit) {
-            state.selectedStickerId = hit.id;
-            state.stickerDragId = hit.id;
-            state.stickerDragOffset = { x: p.x - hit.x, y: p.y - hit.y };
-            // Match size selector to selected sticker
-            document.querySelectorAll('#sticker-sizes .size-btn').forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.size, 10) === hit.size);
-            });
-            renderStickers();
-        } else if (state.activeStickerEmoji) {
-            const s = {
-                id: state.nextStickerId++,
-                emoji: state.activeStickerEmoji,
-                x: p.x,
-                y: p.y,
-                size: state.stickerSize
-            };
-            state.placedStickers.push(s);
-            state.selectedStickerId = s.id;
-            state.stickerDragId = s.id;
-            state.stickerDragOffset = { x: 0, y: 0 };
-            renderStickers();
-        } else {
-            state.selectedStickerId = null;
-            renderStickers();
-        }
-    });
-
-    stickerCanvas.addEventListener('pointermove', (e) => {
-        if (state.mode !== 'sticker' || state.stickerDragId === null) return;
-        e.preventDefault();
-        const p = pos(e, stickerCanvas);
-        const s = state.placedStickers.find(x => x.id === state.stickerDragId);
-        if (s) {
-            s.x = p.x - state.stickerDragOffset.x;
-            s.y = p.y - state.stickerDragOffset.y;
-            renderStickers();
-        }
-    });
-
-    function endStickerDrag() {
-        state.stickerDragId = null;
-    }
-    stickerCanvas.addEventListener('pointerup', endStickerDrag);
-    stickerCanvas.addEventListener('pointercancel', endStickerDrag);
-    stickerCanvas.addEventListener('pointerleave', endStickerDrag);
-
-    stickerCanvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-    stickerCanvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-
-    /* === Misc === */
     document.addEventListener('gesturestart', (e) => e.preventDefault());
     document.addEventListener('contextmenu', (e) => {
-        if (e.target === canvas || e.target === stickerCanvas) e.preventDefault();
+        if (e.target === canvas) e.preventDefault();
     });
 })();
 </script>
