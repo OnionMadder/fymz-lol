@@ -17,14 +17,14 @@ let _unlocked     = false;  // Web Audio requires a user gesture first
 
 // Track → music file mapping
 const TRACK_MUSIC = {
-    city:       'music/city.wav',
-    desert:     'music/desert.wav',
-    space:      'music/space.wav',
-    icy:        'music/icy.wav',
-    rainforest: 'music/rainforest.wav',
-    tamil:      'music/tamil.wav',
-    block:      'music/block.wav',
-    candy:      'music/candy.wav',
+    city:       'music/city.mp3',
+    desert:     'music/desert.mp3',
+    space:      'music/space.mp3',
+    icy:        'music/icy.mp3',
+    rainforest: 'music/rainforest.mp3',
+    tamil:      'music/tamil.mp3',
+    block:      'music/block.mp3',
+    candy:      'music/candy.mp3',
 };
 
 // Pre-cached SFX elements (one per sound to avoid reload lag)
@@ -49,7 +49,7 @@ export function unlockAudio() {
 
 /** Play the overworld / menu BGM */
 export function playOverworld() {
-    _playBg('overworld', 'music/overworld.wav');
+    _playBg('overworld', 'music/overworld.mp3');
 }
 
 /** Play the BGM for the given track name */
